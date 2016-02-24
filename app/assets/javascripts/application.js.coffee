@@ -3,13 +3,13 @@
 #= require turbolinks
 #= require react
 #= require react_ujs
+#= require_tree ./react
 #= require moment
 #= require js-routes
 #= require nprogress
 #= require nprogress-turbolinks
 #= require nprogress-ajax
 
-#= require_tree ./react
 
 
 $ ->
