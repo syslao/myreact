@@ -1,0 +1,16 @@
+class PersonSerializer < ActiveModel::Serializer
+  attributes  :id,
+              :full_name,
+              :last_name,
+              :gender,
+              :birth_date,
+              :location,
+              :phone_number,
+              :email,
+              :headline,
+              :picture
+
+  def full_name
+    [object.first_name, object.last_name].join(' ')
+  end
+end
