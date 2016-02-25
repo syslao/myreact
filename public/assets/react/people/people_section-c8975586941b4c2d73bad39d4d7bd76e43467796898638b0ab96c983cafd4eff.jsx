@@ -31,7 +31,7 @@ var PeopleSection = React.createClass({
   render: function() {
     return (
       <div className="cards-wrapper">
-        <ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={500} transitionLeaveTimeout={300}>
+        <ReactCSSTransitionGroup transitionName="card">
           {this.state.people.map(function(person) {
              return <PersonCard key={person.id} data={person}/>;
           })}

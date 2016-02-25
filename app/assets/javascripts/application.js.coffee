@@ -11,7 +11,6 @@
 #= require nprogress-ajax
 
 
-
 $ ->
   NProgress.configure
     showSpinner: false
