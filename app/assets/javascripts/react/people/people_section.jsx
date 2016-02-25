@@ -1,3 +1,4 @@
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup
 var PeopleSection = React.createClass({
   // displayName: 'PeopleSection',
 
@@ -30,12 +31,16 @@ var PeopleSection = React.createClass({
 
   render: function() {
     return (
-      <div className="cards-wrapper">
-        <ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={500} transitionLeaveTimeout={300}>
-          {this.state.people.map(function(person) {
-             return <PersonCard key={person.id} data={person}/>;
-          })}
-        </ReactCSSTransitionGroup>
+
+      <div>
+        <PeopleSearch/>
+          <div className="cards-wrapper">
+            <ReactCSSTransitionGroup transitionName="card" transitionEnterTimeout={500} transitionLeaveTimeout={300}>
+              {this.state.people.map(function(person) {
+                 return <PersonCard key={person.id} data={person}/>;
+              })}
+            </ReactCSSTransitionGroup>
+          </div>
       </div>
     );
   }
@@ -46,7 +51,7 @@ var PeopleSection = React.createClass({
 var PersonCard = React.createClass({
   render: function() {
     return (
-      <div className="male">
+      <div className="card male">
       <header>
         <div className="avatar-wrapper">
           &nbsp;
@@ -72,5 +77,19 @@ var PersonCard = React.createClass({
     </div>
     );
   }
-})
+});
+
+var PeopleSearch = React.createClass({
+  render: function() {
+    return (
+      <div className="filter-wrapper">
+        <div className="form-wrapper">
+          <form onSubmit={this._handleOnSubmit}>
+            <input ref="search" placeholder="Search people..." type="search"/>
+          </form>
+        </div>
+      </div>
+    );
+  }
+});
 

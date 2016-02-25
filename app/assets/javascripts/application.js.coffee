@@ -9,6 +9,7 @@
 #= require nprogress
 #= require nprogress-turbolinks
 #= require nprogress-ajax
+ReactCSSTransitionGroup = React.addons.CSSTransitionGroup
 
 
 $ ->
