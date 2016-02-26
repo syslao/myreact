@@ -29,11 +29,15 @@ var PeopleSection = React.createClass({
     })
   },
 
+    _handleOnSearchSubmit: function(search){
+      this._fetchPeople({search: search})
+    },
+
   render: function() {
     return (
 
       <div>
-        <PeopleSearch/>
+        <PeopleSearch onFormSubmit={this._handleOnSearchSubmit}/>
           <div className="cards-wrapper">
             <ReactCSSTransitionGroup transitionName="card" transitionEnterTimeout={500} transitionLeaveTimeout={300}>
               {this.state.people.map(function(person) {
@@ -50,8 +54,12 @@ var PeopleSection = React.createClass({
 
 var PersonCard = React.createClass({
   render: function() {
+    var CardClasses = classNames({ 'card'  : true, 
+                      'female': this.props.data.gender === 'female',
+                      'male'  : this.props.data.gender === 'male'
+                      });
     return (
-      <div className="card male">
+      <div className={CardClasses}>
       <header>
         <div className="avatar-wrapper">
           &nbsp;
@@ -80,6 +88,13 @@ var PersonCard = React.createClass({
 });
 
 var PeopleSearch = React.createClass({
+  _handleOnSubmit: function(e) {
+    e.preventDefault();
+    var searchValue = this.refs.search.getDOMNode().value.trim()
+    this.props.onFormSubmit(searchValue)
+  },
+
+ 
   render: function() {
     return (
       <div className="filter-wrapper">
