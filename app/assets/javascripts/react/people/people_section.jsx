@@ -13,20 +13,26 @@ var PeopleSection = React.createClass({
     this._fetchPeople();
   },
 
-  _fetchPeople: function() {
+  _fetchPeople: function(data) {
     $.ajax({
       url: Routes.people_path(),
       dataType: 'json',
-      cache: false,
-      success: function(data) {
-        this.setState({
-          people: data.people,
-          didFetchData: true});
-      }.bind(this),
+      data: data,
+      success: this._fetchDataDone,
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
       }.bind(this)
     })
+  },
+
+  _fetchDataDone: function(data, textStatus, jqXHR) {
+    if (!this.isMounted()) {
+      return false;
+    }
+    this.setState({
+      didFetchData: true,
+      people: data.people
+    });
   },
 
     _handleOnSearchSubmit: function(search){
@@ -54,7 +60,7 @@ var PeopleSection = React.createClass({
 
 var PersonCard = React.createClass({
   render: function() {
-    var CardClasses = classNames({ 'card'  : true, 
+    var CardClasses = classNames({ 'card'  : true,
                       'female': this.props.data.gender === 'female',
                       'male'  : this.props.data.gender === 'male'
                       });
@@ -94,7 +100,7 @@ var PeopleSearch = React.createClass({
     this.props.onFormSubmit(searchValue)
   },
 
- 
+
   render: function() {
     return (
       <div className="filter-wrapper">
