@@ -39,78 +39,42 @@ var PeopleSection = React.createClass({
       this._fetchPeople({search: search})
     },
 
-  render: function() {
-    return (
+    render: function() {
 
-      <div>
-        <PeopleSearch onFormSubmit={this._handleOnSearchSubmit}/>
-          <div className="cards-wrapper">
-            <ReactCSSTransitionGroup transitionName="card" transitionEnterTimeout={500} transitionLeaveTimeout={300}>
-              {this.state.people.map(function(person) {
-                 return <PersonCard key={person.id} data={person}/>;
-              })}
-            </ReactCSSTransitionGroup>
+    var card =  this.state.people.map(function(person) {
+                return <PersonCard key={person.id} data={person}/>;
+                })
+
+
+
+    var noDataNode = <div className="warning">
+                      <span className="fa-stack">
+                        <i className="fa fa-meh-o fa-stack-2x"></i>
+                      </span>
+                      <h4>No people found...</h4>
+                    </div>
+
+    var loginButton;
+    if (this.state.people.length > 0) {
+      loginButton = card
+    } else if (this.state.didFetchData) {
+      loginButton = noDataNode
+    }
+
+
+
+        return (
+
+          <div>
+            <PeopleSearch onFormSubmit={this._handleOnSearchSubmit}/>
+              <div className="cards-wrapper">
+                <ReactCSSTransitionGroup transitionName="card" transitionEnterTimeout={500} transitionLeaveTimeout={300}>
+                {loginButton}
+                </ReactCSSTransitionGroup>
+              </div>
           </div>
-      </div>
-    );
-  }
+        );
+      }
 
-});
-
-
-var PersonCard = React.createClass({
-  render: function() {
-    var CardClasses = classNames({ 'card'  : true,
-                      'female': this.props.data.gender === 'female',
-                      'male'  : this.props.data.gender === 'male'
-                      });
-    return (
-      <div className={CardClasses}>
-      <header>
-        <div className="avatar-wrapper">
-          &nbsp;
-          <img className="avatar" src={this.props.data.picture} />
-        </div>
-        <div className="info-wrapper">
-          <h4>{this.props.data.first_name} {this.props.data.last_name}</h4>
-          <ul className="meta">
-            <li><i className="fa fa-map-marker"></i> {this.props.data.location}</li>
-            <li><i className="fa fa-birthday-cake"></i> {moment(this.props.data.birth_date).format('D MMM YYYY')}</li>
-          </ul>
-        </div>
-      </header>
-      <div className="card-body">
-        <div className="headline">
-          <p>{this.props.data.headline}</p>
-        </div>
-        <ul className="contact-info">
-          <li><i className="fa fa-phone"></i> {this.props.data.phone_number}</li>
-            <li><i className="fa fa-envelope"></i> {this.props.data.email}</li>
-        </ul>
-      </div>
-    </div>
-    );
-  }
-});
-
-var PeopleSearch = React.createClass({
-  _handleOnSubmit: function(e) {
-    e.preventDefault();
-    var searchValue = this.refs.search.getDOMNode().value.trim()
-    this.props.onFormSubmit(searchValue)
-  },
-
-
-  render: function() {
-    return (
-      <div className="filter-wrapper">
-        <div className="form-wrapper">
-          <form onSubmit={this._handleOnSubmit}>
-            <input ref="search" placeholder="Search people..." type="search"/>
-          </form>
-        </div>
-      </div>
-    );
-  }
 });
 
