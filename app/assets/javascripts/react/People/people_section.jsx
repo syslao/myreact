@@ -26,7 +26,7 @@ var PeopleSection = React.createClass({
     $.ajax({
       url: Routes.people_path(),
       dataType: 'json',
-      data: data,
+      data: this.state.fetchData,
       success: this._fetchDataDone,
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -35,18 +35,34 @@ var PeopleSection = React.createClass({
   },
 
   _fetchDataDone: function(data, textStatus, jqXHR) {
+    console.log(data)
     if (!this.isMounted()) {
       return false;
     }
     this.setState({
       didFetchData: true,
-      people: data.people
+      people: data.people,
+      meta: data.meta
     });
+    console.log(this.state.meta.total_pages)
+    
   },
 
-    _handleOnSearchSubmit: function(search){
-      this._fetchPeople({search: search})
-    },
+  _handleOnPaginate: function(pageNumber){
+    this.state.fetchData.page = pageNumber
+    this._fetchPeople()
+  },
+
+
+
+
+  _handleOnSearchSubmit: function(search){
+    this.state.fetchData = { 
+      search: search,
+      page: 1
+    }
+    this._fetchPeople()
+  },
 
     render: function() {
 
@@ -82,6 +98,7 @@ var PeopleSection = React.createClass({
                 {card}
                 </ReactCSSTransitionGroup>
               </div>
+            <PaginatorSection totalPages={this.state.meta.total_pages} currentPage={this.state.meta.current_page} onPaginate={this._handleOnPaginate}/>
           </div>
         );
       }
